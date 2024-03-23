@@ -1,0 +1,54 @@
+[gd_scene load_steps=6 format=3 uid="uid://cxvs50ppbwfyt"]
+
+[ext_resource type="Texture2D" uid="uid://cdqatvnnqn33b" path="res://xp.png" id="1_hjtjm"]
+
+[sub_resource type="GDScript" id="GDScript_rdq3t"]
+script/source = "extends Area2D
+
+
+# Called when the node enters the scene tree for the first time.
+func _ready():
+	pass # Replace with function body.
+
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(delta):
+	pass
+
+
+func _on_body_entered(body):
+	if body == $\"../../player\":
+		Main.emit_signal('exp')
+		queue_free()
+"
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_47yy2"]
+size = Vector2(56, 48)
+
+[sub_resource type="Gradient" id="Gradient_215bs"]
+offsets = PackedFloat32Array(0, 0.454545)
+colors = PackedColorArray(0.565804, 0.700977, 0.823318, 1, 1, 0.988235, 1, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_a4xi5"]
+gradient = SubResource("Gradient_215bs")
+width = 75
+height = 75
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+
+[node name="xp" type="Area2D"]
+script = SubResource("GDScript_rdq3t")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+scale = Vector2(0.125, 0.125)
+shape = SubResource("RectangleShape2D_47yy2")
+
+[node name="Xp" type="Sprite2D" parent="."]
+scale = Vector2(0.125, 0.125)
+texture = ExtResource("1_hjtjm")
+
+[node name="PointLight2D" type="PointLight2D" parent="."]
+texture = SubResource("GradientTexture2D_a4xi5")
+texture_scale = 0.52
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]

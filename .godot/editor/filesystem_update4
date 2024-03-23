@@ -1,0 +1,6 @@
+res://main.tscn
+res://player.tscn
+res://manualbullet.tscn
+res://crab_enemy.tscn
+res://xp.tscn
+res://player.gd

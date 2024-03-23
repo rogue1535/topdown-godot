@@ -1,0 +1,119 @@
+[gd_scene load_steps=9 format=3 uid="uid://bbeuomm7yg4e2"]
+
+[ext_resource type="Script" path="res://player.gd" id="1_5vdk4"]
+[ext_resource type="Texture2D" uid="uid://bvuogre8tuv7a" path="res://staticperson.png" id="1_mgfkn"]
+[ext_resource type="Texture2D" uid="uid://bhg635keo0c4b" path="res://icon.svg" id="3_o1d26"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_b5lyt"]
+size = Vector2(20, 24)
+
+[sub_resource type="GDScript" id="GDScript_vognd"]
+resource_name = "endofgun"
+script/source = "extends Marker2D
+
+var pos = 600
+var direction = Vector2.ZERO
+# Called when the node enters the scene tree for the first time.
+func _ready():
+	pass # Replace with function body.
+
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(delta):
+	
+	direction = (get_global_mouse_position() - self.global_position).normalized()
+	var dir = direction * pos
+	self.global_position =  $\"..\".global_position + dir * delta
+	
+"
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1bkp1"]
+size = Vector2(30.0859, 32.75)
+
+[sub_resource type="GDScript" id="GDScript_7tjq6"]
+script/source = "extends Label
+
+
+# Called when the node enters the scene tree for the first time.
+func _ready():
+	pass # Replace with function body.
+
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(delta):
+	text =\"score: \" +str(Main.score)
+"
+
+[sub_resource type="GDScript" id="GDScript_o6i0o"]
+script/source = "extends Label
+
+
+# Called when the node enters the scene tree for the first time.
+func _ready():
+	pass # Replace with function body.
+
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(delta):
+	text =\"Hp: \" +str(Main.Hp)
+"
+
+[node name="player" type="CharacterBody2D"]
+input_pickable = true
+motion_mode = 1
+slide_on_ceiling = false
+floor_stop_on_slope = false
+floor_block_on_wall = false
+platform_on_leave = 2
+safe_margin = 0.8
+script = ExtResource("1_5vdk4")
+speed = 50
+
+[node name="Camera2D" type="Camera2D" parent="."]
+zoom = Vector2(1.5, 1.5)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_b5lyt")
+
+[node name="Staticperson" type="Sprite2D" parent="."]
+texture = ExtResource("1_mgfkn")
+
+[node name="manualTimer" type="Timer" parent="."]
+wait_time = 0.8
+
+[node name="autoTimer" type="Timer" parent="."]
+wait_time = 0.904
+autostart = true
+
+[node name="moltov" type="Timer" parent="."]
+
+[node name="endofgun" type="Marker2D" parent="."]
+script = SubResource("GDScript_vognd")
+
+[node name="Icon" type="Sprite2D" parent="endofgun"]
+scale = Vector2(0.0390625, 0.0390625)
+texture = ExtResource("3_o1d26")
+metadata/_edit_lock_ = true
+
+[node name="dmg" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="dmg"]
+shape = SubResource("RectangleShape2D_1bkp1")
+
+[node name="hud" type="Label" parent="."]
+offset_left = -277.0
+offset_top = -285.0
+offset_right = -237.0
+offset_bottom = -262.0
+script = SubResource("GDScript_7tjq6")
+
+[node name="Label" type="Label" parent="hud"]
+layout_mode = 0
+offset_left = 1.0
+offset_top = 29.0
+offset_right = 41.0
+offset_bottom = 52.0
+script = SubResource("GDScript_o6i0o")
+
+[connection signal="timeout" from="autoTimer" to="." method="_on_auto_timer_timeout"]
+[connection signal="body_shape_entered" from="dmg" to="." method="_on_dmg_body_shape_entered"]

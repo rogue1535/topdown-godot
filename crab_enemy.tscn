@@ -1,0 +1,58 @@
+[gd_scene load_steps=4 format=3 uid="uid://d2fvpsusyfqg"]
+
+[ext_resource type="Texture2D" uid="uid://chdqvelux75a8" path="res://crab.png" id="1_a4twx"]
+
+[sub_resource type="GDScript" id="GDScript_f5olk"]
+resource_name = "crab enemy"
+script/source = "extends CharacterBody2D
+@export var speed = 110
+var dist 
+var xp = preload(\"res://xp.tscn\")
+# Called when the node enters the scene tree for the first time.
+func _ready():
+	pass # Replace with function body.
+
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(delta):
+	var direction = ($\"../../player\".position - self.position).normalized()
+	velocity = direction * speed
+	move_and_slide()
+	
+	dist = abs((self.global_position - $\"../../player\".global_position)).length()
+	if dist <= Main.distarget:
+		Main.distarget = dist
+		Main.target = self
+	if Main.target == self:
+		Main.distarget = dist
+
+
+func handle_hit():
+	if Main.target == self:
+		Main.target = null
+		Main.distarget = 10000
+	Main.score += 1
+	var xpsp = xp.instantiate()
+	$\"../../bullets\".add_child(xpsp)
+	xpsp.global_position = self.global_position
+	queue_free()
+"
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_hli0o"]
+size = Vector2(30, 8)
+
+[node name="crab enemy" type="CharacterBody2D" groups=["enemy"]]
+collision_priority = 2.0
+motion_mode = 1
+floor_stop_on_slope = false
+floor_constant_speed = true
+floor_block_on_wall = false
+safe_margin = 5.0
+script = SubResource("GDScript_f5olk")
+speed = 45
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_hli0o")
+
+[node name="Crab" type="Sprite2D" parent="."]
+texture = ExtResource("1_a4twx")

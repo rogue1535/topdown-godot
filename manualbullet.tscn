@@ -1,0 +1,46 @@
+[gd_scene load_steps=4 format=3 uid="uid://b2ja5d1hvk024"]
+
+[ext_resource type="Texture2D" uid="uid://jeoiovusfq1i" path="res://bullet.png" id="1_3m0mr"]
+
+[sub_resource type="GDScript" id="GDScript_4qaau"]
+resource_name = "bullet"
+script/source = "extends Area2D
+var target 
+@export var speed = 400
+var direct = Vector2(0,0)
+var velocity = Vector2.ZERO
+func _ready():
+	pass
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(delta):
+	
+	position += velocity.normalized() * delta * speed
+	if target != null:
+		velocity = target.global_position - self.global_position
+
+
+
+
+func _on_body_entered(body):
+	
+	if body.has_method('handle_hit'):
+		body.handle_hit()
+		queue_free()
+"
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_0lcqf"]
+size = Vector2(4, 4)
+
+[node name="manualbullet" type="Area2D"]
+script = SubResource("GDScript_4qaau")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, 1)
+shape = SubResource("RectangleShape2D_0lcqf")
+
+[node name="Bullet" type="Sprite2D" parent="."]
+position = Vector2(0, 1)
+rotation = 1.5708
+texture = ExtResource("1_3m0mr")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
