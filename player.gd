@@ -1,10 +1,9 @@
 extends CharacterBody2D
 var current_exp =0
 @export var speed = 100
-var hp = Main.Playerhp
+var hp = Main.Playerhp 
 @export var manbullet = preload("res://manualbullet.tscn")
-@export var can_attack = true 
-var mouse_inside = false
+@export var moltov = preload("res://nade.tscn")
 signal time
 signal player_bulllet_fired
 signal upgrade
@@ -44,24 +43,25 @@ func auto():
 	
 	
 func _on_auto_timer_timeout():
-	manual()
 	if Main.target != null:
 		auto()
 	else:
 		Main.distarget = 10000
 
-func _on_dmg_body_shape_entered(body_rid, body, body_shape_index, local_shape_index):
+
+func _on_dmg_body_entered(body):
+	
 	var dmg = abs((self.global_position - body.global_position)).length()
 	if body.is_in_group('enemy') ==true:
 		if abs((self.global_position - body.global_position)).length() <= 30:
 			Main.Hp -=1
 			if Main.Hp <=0:
-				get_tree().reload_current_scene()
 				Main.Hp = 10
 				Main.score = 0
 				current_exp = 0
+				get_tree().reload_current_scene()
+				
 		print(abs((self.global_position - body.global_position)).length())
-
 
 func on_exp_picked():
 	current_exp+=1
@@ -72,3 +72,17 @@ func on_exp_picked():
 
 func on_upgrade():
 	pass
+
+
+func _on_manual_timer_timeout():
+	manual()
+
+
+func _on_moltov_timer_timeout():
+	var Moltov = moltov.instantiate()
+	$"../bullets".add_child(Moltov)
+	Moltov.position = self.position
+	Moltov.velocity.y = -100*get_process_delta_time()
+	Moltov.velocity = Moltov.velocity.rotated(randi_range(0, 2*PI))
+
+	

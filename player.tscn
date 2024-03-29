@@ -80,12 +80,15 @@ texture = ExtResource("1_mgfkn")
 
 [node name="manualTimer" type="Timer" parent="."]
 wait_time = 0.8
+autostart = true
 
 [node name="autoTimer" type="Timer" parent="."]
 wait_time = 0.904
 autostart = true
 
-[node name="moltov" type="Timer" parent="."]
+[node name="moltovTimer" type="Timer" parent="."]
+wait_time = 0.5
+autostart = true
 
 [node name="endofgun" type="Marker2D" parent="."]
 script = SubResource("GDScript_vognd")
@@ -115,5 +118,7 @@ offset_right = 41.0
 offset_bottom = 52.0
 script = SubResource("GDScript_o6i0o")
 
+[connection signal="timeout" from="manualTimer" to="." method="_on_manual_timer_timeout"]
 [connection signal="timeout" from="autoTimer" to="." method="_on_auto_timer_timeout"]
-[connection signal="body_shape_entered" from="dmg" to="." method="_on_dmg_body_shape_entered"]
+[connection signal="timeout" from="moltovTimer" to="." method="_on_moltov_timer_timeout"]
+[connection signal="body_entered" from="dmg" to="." method="_on_dmg_body_entered"]

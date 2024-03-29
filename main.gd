@@ -2,7 +2,7 @@ extends Node2D
 var target = null
 var distarget = 10000
 
-var Playerhp = 10
+var Playerhp = 1
 
 var manualWeapon = true
 var autoWeapon = false

@@ -1,6 +1,8 @@
 res://main.tscn
+res://burn.gd
 res://player.tscn
 res://manualbullet.tscn
 res://crab_enemy.tscn
 res://xp.tscn
-res://player.gd
+res://burn.tscn
+res://nade.tscn

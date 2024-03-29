@@ -1,0 +1,23 @@
+[gd_scene load_steps=4 format=3 uid="uid://c6ccuidgyo5vk"]
+
+[ext_resource type="Script" path="res://nade.gd" id="1_df1lb"]
+[ext_resource type="Texture2D" uid="uid://dk816afieifjj" path="res://nade.png" id="2_ep6pf"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_uj0jk"]
+size = Vector2(21, 30)
+
+[node name="nade" type="Area2D"]
+script = ExtResource("1_df1lb")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_uj0jk")
+
+[node name="Nade" type="Sprite2D" parent="."]
+scale = Vector2(1.3, 1.3)
+texture = ExtResource("2_ep6pf")
+
+[node name="Timer" type="Timer" parent="."]
+autostart = true
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
